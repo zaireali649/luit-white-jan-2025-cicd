@@ -1,0 +1,22 @@
+name: Upload beta website
+
+on:
+  pull_request:
+
+jobs:
+  upload_beta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Change this to your desired AWS region
+
+      - name: Upload static website to beta
+        run: |
+          aws s3 cp index.html s3://luit-white-jan-2025-cicd-beta --acl public-read
